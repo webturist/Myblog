@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>{% block title %} {{ post['title'] }} by {{ post['author_name'] }} {% endblock %}</h2>
+    <a class="nav-link" href="{{url_for('user_profile', username=post['author_name'])}}">Profile</a>
+    <span class="badge badge-primary">{{ post['created'] }}</span>
+    <div class="p-3 mb-2 bg-light text-dark">
+    <p class="fw-normal font-monospace">{{ post['content'] }}</p>
+    </div>
+
+        <a href="{{ url_for('edit', id=post['id']) }}">
+            <span class="badge badge-warning">Edit</span>
+        </a>
+<h2>Comments</h2>
+        {% for comment in comments %}
+            <p>{{ comment['comment'] }}</p>
+        {% endfor %}
+
+        <form action="{{ url_for('comment', post_id=post['id']) }}" method="post">
+            <label for="comment">Leave a comment:</label><br>
+            <textarea name="comment" id="comment"></textarea><br>
+            <input type="submit" class="btn btn-primary" value="Submit">
+        </form>
+
+        <p><a href="{{ url_for('index') }}">Back</a></p>
+
+{% endblock %}

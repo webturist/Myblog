@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+    <h1>Login</h1>
+    <form action="{{ url_for('login') }}" method="post">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username">
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password">
+        <input type="submit" value="Submit">
+    </form>
+
+
+    <p class=""><a href="{{url_for('reset_request')}}"><span class="glyphicon glyphicon-question-sign"></span> {{ ('Forgot password') }}</a></p>
+
+
+{% endblock %}

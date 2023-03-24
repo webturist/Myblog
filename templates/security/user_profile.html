@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>{{ user['username'] }}</h1>
+    <p>Email: {{ user['email'] }}</p>
+   {% if current_user.is_authenticated and current_user.id == user['id'] %}
+ <p><a class="nav-link" href="{{ url_for('edit_profile') }}"> Edit Profile</a></p>
+{% endif %}
+    <h2>Posts</h2>
+    {% for post in posts %}
+        <h3><a href="{{ url_for('post', post_id=post['id']) }}">{{ post['title'] }}</a></h3>
+        <p>{{ post['content'] }}</p>
+    {% endfor %}
+{% endblock %}
