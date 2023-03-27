@@ -12,11 +12,18 @@ from datetime import datetime, timedelta
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'My_secret_key'
-app.config['MAIL_SERVER'] = 'your mail server'
+app.config['MAIL_SERVER'] = 'mail.packsumy.com.ua'
 app.config['MAIL_PORT'] = 465
 app.config['MAIL_USE_SSL'] = True
-app.config['MAIL_USERNAME'] = 'your email username'
-app.config['MAIL_PASSWORD'] = 'your email password'
+try:
+    with open('mail.txt', 'r') as f:
+        lines = f.readlines()
+        if len(lines) < 2:
+            raise Exception('File mail.txt is not in the correct format')
+        app.config['MAIL_USERNAME'] = lines[0].strip()
+        app.config['MAIL_PASSWORD'] = lines[1].strip()
+except Exception as e:
+    flash(f'Error: {e}')
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -292,7 +299,7 @@ def reset_token(token):
         db.close()
         flash('Your password has been updated! You are now able to log in')
         return redirect(url_for('login'))
-    return render_template('security/resettoken.html')
+    return render_template('security/resettoken.html', token=token)
 
 
 @app.route('/change_password', methods=('GET', 'POST'))
