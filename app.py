@@ -8,9 +8,12 @@ from flask_login import LoginManager, login_user, logout_user, login_required, c
 from werkzeug.security import check_password_hash, generate_password_hash
 from flask_mail import Mail, Message
 import jwt
+
 from datetime import datetime, timedelta
 
+
 app = Flask(__name__)
+
 app.config['SECRET_KEY'] = 'My_secret_key'
 app.config['MAIL_SERVER'] = 'mail.packsumy.com.ua'
 app.config['MAIL_PORT'] = 465
@@ -23,7 +26,7 @@ try:
         app.config['MAIL_USERNAME'] = lines[0].strip()
         app.config['MAIL_PASSWORD'] = lines[1].strip()
 except Exception as e:
-    flash(f'Error: {e}')
+    app.logger.error(f'Error: {e}')
 
 login_manager = LoginManager()
 login_manager.init_app(app)
