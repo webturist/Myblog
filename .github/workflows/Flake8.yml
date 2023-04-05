@@ -1,3 +1,5 @@
+name: Run Flake8
+
 on: [push]
 
 jobs:
