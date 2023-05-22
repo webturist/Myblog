@@ -64,7 +64,8 @@ def register():
         if existing_user:
             flash('Username already exists. Please choose a different one.')
             return redirect(url_for('register'))
-        db.execute('INSERT INTO users (username, email, password) VALUES (?, ?, ?)',
+        db.execute('INSERT INTO users (username, email, password)'
+                   ' VALUES (?, ?, ?)',
                    (username, email, generate_password_hash(password)))
         db.commit()
         db.close()
@@ -75,9 +76,10 @@ def register():
 
 def get_post(post_id):
     conn = get_db_connection()
-    post = conn.execute('SELECT p.id, p.title, p.content, p.created, p.user_id,'
-                        ' u.username as author_name '
-                        'FROM posts p JOIN users u ON p.user_id = u.id WHERE p.id = ?',
+    post = conn.execute('SELECT p.id, p.title, p.content, p.created,'
+                        ' p.user_id, u.username as author_name '
+                        'FROM posts p JOIN users u ON p.user_id = u.id'
+                        ' WHERE p.id = ?',
                         (post_id,)).fetchone()
     conn.close()
     if post is None:
@@ -107,7 +109,8 @@ class User:
 @login_manager.user_loader
 def load_user(user_id):
     db = get_db_connection()
-    user = db.execute('SELECT * FROM users WHERE id = ?', (user_id,)).fetchone()
+    user = db.execute('SELECT * FROM users WHERE id = ?',
+                      (user_id,)).fetchone()
     db.close()
     if user:
         return User(user['id'], user['username'], user['password'])
@@ -176,7 +179,8 @@ def comment(post_id):
     if request.method == 'POST':
         comment = request.form['comment']
         conn = get_db_connection()
-        conn.execute('INSERT INTO comments (post_id, comment) VALUES (?, ?)', 
+        conn.execute('INSERT INTO comments (post_id, comment)'
+                     ' VALUES (?, ?)',
                      (post_id, comment))
         conn.commit()
         conn.close()
@@ -195,7 +199,8 @@ def create():
             flash('Title is required!')
         else:
             conn = get_db_connection()
-            conn.execute('INSERT INTO posts (title, content, user_id) VALUES (?, ?, ?)', 
+            conn.execute('INSERT INTO posts (title, content, user_id)'
+                         ' VALUES (?, ?, ?)',
                          (title, content, user_id))
             conn.commit()
             conn.close()
@@ -260,7 +265,8 @@ def verify_reset_token(token):
     except jwt.InvalidTokenError:
         return None
     db = get_db_connection()
-    user = db.execute('SELECT * FROM users WHERE id = ?', (user_id,)).fetchone()
+    user = db.execute('SELECT * FROM users WHERE id = ?',
+                      (user_id,)).fetchone()
     db.close()
     if user:
         return User(user['id'], user['username'], user['password'])
@@ -273,10 +279,12 @@ def reset_request():
     if request.method == 'POST':
         email = request.form['email']
         db = get_db_connection()
-        user = db.execute('SELECT * FROM users WHERE email = ?', (email,)).fetchone()
+        user = db.execute('SELECT * FROM users WHERE email = ?',
+                          (email,)).fetchone()
         db.close()
         if user:
-            token = get_reset_token(User(user['id'], user['username'], user['password']))
+            token = get_reset_token(User(user['id'], user['username'],
+                                         user['password']))
 
             msg = Message('Password Reset Request',
                           sender='noreply@demo.com',
