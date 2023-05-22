@@ -4,7 +4,8 @@ import sqlite3
 import mail as mail
 from flask import Flask, render_template, request, url_for, flash, redirect
 from werkzeug.exceptions import abort
-from flask_login import LoginManager, login_user, logout_user, login_required, current_user
+from flask_login import LoginManager, login_user, logout_user, login_required,\
+    current_user
 from werkzeug.security import check_password_hash, generate_password_hash
 from flask_mail import Mail, Message
 import jwt
@@ -58,7 +59,8 @@ def register():
         username = request.form['username']
         password = request.form['password']
         email = request.form['email']
-        existing_user = db.execute('SELECT * FROM users WHERE username = ?', (username,)).fetchone()
+        existing_user = db.execute('SELECT * FROM users WHERE username = ?',
+                                   (username,)).fetchone()
         if existing_user:
             flash('Username already exists. Please choose a different one.')
             return redirect(url_for('register'))
@@ -73,8 +75,10 @@ def register():
 
 def get_post(post_id):
     conn = get_db_connection()
-    post = conn.execute('SELECT p.id, p.title, p.content, p.created, p.user_id, u.username as author_name '
-                        'FROM posts p JOIN users u ON p.user_id = u.id WHERE p.id = ?', (post_id,)).fetchone()
+    post = conn.execute('SELECT p.id, p.title, p.content, p.created, p.user_id,'
+                        ' u.username as author_name '
+                        'FROM posts p JOIN users u ON p.user_id = u.id WHERE p.id = ?',
+                        (post_id,)).fetchone()
     conn.close()
     if post is None:
         abort(404)
@@ -117,7 +121,8 @@ def login():
         db = get_db_connection()
         username = request.form['username']
         password = request.form['password']
-        user = db.execute('SELECT * FROM users WHERE username = ?', (username,)).fetchone()
+        user = db.execute('SELECT * FROM users WHERE username = ?', 
+                          (username,)).fetchone()
         db.close()
         if user and check_password_hash(user['password'], password):
             login_user(User(user['id'], user['username'], user['password']))
@@ -147,8 +152,10 @@ def index():
 @app.route('/user/<username>')
 def user_profile(username):
     conn = get_db_connection()
-    user = conn.execute('SELECT * FROM users WHERE username = ?', (username,)).fetchone()
-    posts = conn.execute('SELECT * FROM posts WHERE user_id = ?', (user['id'],)).fetchall()
+    user = conn.execute('SELECT * FROM users WHERE username = ?', 
+                        (username,)).fetchone()
+    posts = conn.execute('SELECT * FROM posts WHERE user_id = ?', 
+                         (user['id'],)).fetchall()
     conn.close()
     if user is None:
         abort(404)
@@ -159,7 +166,8 @@ def user_profile(username):
 def post(post_id):
     post = get_post(post_id)
     conn = get_db_connection()
-    comments = conn.execute('SELECT * FROM comments WHERE post_id = ?', (post_id,)).fetchall()
+    comments = conn.execute('SELECT * FROM comments WHERE post_id = ?', 
+                            (post_id,)).fetchall()
     return render_template('post.html', post=post, comments=comments)
 
 
@@ -168,7 +176,8 @@ def comment(post_id):
     if request.method == 'POST':
         comment = request.form['comment']
         conn = get_db_connection()
-        conn.execute('INSERT INTO comments (post_id, comment) VALUES (?, ?)', (post_id, comment))
+        conn.execute('INSERT INTO comments (post_id, comment) VALUES (?, ?)', 
+                     (post_id, comment))
         conn.commit()
         conn.close()
         return redirect(url_for('post', post_id=post_id))
@@ -186,7 +195,8 @@ def create():
             flash('Title is required!')
         else:
             conn = get_db_connection()
-            conn.execute('INSERT INTO posts (title, content, user_id) VALUES (?, ?, ?)', (title, content, user_id))
+            conn.execute('INSERT INTO posts (title, content, user_id) VALUES (?, ?, ?)', 
+                         (title, content, user_id))
             conn.commit()
             conn.close()
             return redirect(url_for('index'))
@@ -297,7 +307,8 @@ def reset_token(token):
         return redirect(url_for('reset_request'))
     if request.method == 'POST':
         password = request.form['password']
-        db.execute('UPDATE users SET password=? WHERE id=?', (generate_password_hash(password), user.id))
+        db.execute('UPDATE users SET password=? WHERE id=?',
+                   (generate_password_hash(password), user.id))
         db.commit()
         db.close()
         flash('Your password has been updated! You are now able to log in')
@@ -313,7 +324,8 @@ def change_password():
         new_password = request.form['new_password']
 
         conn = get_db_connection()
-        user = conn.execute('SELECT * FROM users WHERE id = ?', (current_user.id,)).fetchone()
+        user = conn.execute('SELECT * FROM users WHERE id = ?',
+                            (current_user.id,)).fetchone()
         conn.close()
 
         if not check_password_hash(user['password'], current_password):
@@ -322,7 +334,8 @@ def change_password():
 
         password_hash = generate_password_hash(new_password)
         conn = get_db_connection()
-        conn.execute('UPDATE users SET password = ? WHERE id = ?', (password_hash, current_user.id))
+        conn.execute('UPDATE users SET password = ? WHERE id = ?',
+                     (password_hash, current_user.id))
         conn.commit()
         conn.close()
         flash('Your password has been updated.')
@@ -339,7 +352,8 @@ def edit_profile():
         email = request.form['email']
 
         conn = get_db_connection()
-        conn.execute('UPDATE users SET username = ?, email = ? WHERE id = ?', (username, email, current_user.id))
+        conn.execute('UPDATE users SET username = ?, email = ? WHERE id = ?',
+                     (username, email, current_user.id))
         conn.commit()
         conn.close()
         flash('Your profile has been updated.')
