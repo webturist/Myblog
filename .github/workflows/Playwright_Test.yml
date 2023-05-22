@@ -22,4 +22,4 @@ jobs:
         playwright install
 
     - name: Run Playwright test
-      run: pytest Playwright_test.py 
+      run: python Playwright_test.py 
