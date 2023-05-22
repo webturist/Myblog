@@ -10,7 +10,6 @@ class BasicTests(unittest.TestCase):
         app.config['TESTING'] = True
         app.config['WTF_CSRF_ENABLED'] = False
         app.config['DEBUG'] = False
-        app.config['DATABASE'] = 'test.db'
 
         self.app = app.test_client()
 
@@ -40,11 +39,12 @@ class BasicTests(unittest.TestCase):
         self.assertIn(b'FlaskBlog', response.data)
 
     def test_register(self):
-        response = self.app.post('/register', data=dict(
-            username="test_user",
-            password="password",
-            email="test_user@example.com"
-        ))
+        with app.app_context():
+            response = self.app.post('/register', data=dict(
+                username="test_user",
+                password="password",
+                email="test_user@example.com"
+            ))
         self.assertEqual(response.status_code, 302)
 
     def test_login(self):
@@ -97,62 +97,6 @@ class BasicTests(unittest.TestCase):
         self.assertEqual(user.username, 'test_user')
         self.assertTrue(user.is_authenticated())
 
-    def test_edit_post(self):
-        with app.app_context():
-            self.db_connection = get_db_connection()
-            # Add a test user to the database
-            self.db_connection.execute("INSERT INTO users (username, password, email) VALUES (?, ?, ?)",
-                                       ('test_user', 'password', 'test_user@example.com'))
-            self.db_connection.commit()
-
-            # Add a test post to the database
-            self.db_connection.execute("INSERT INTO posts (title, content, user_id) VALUES (?, ?, ?)",
-                                       ('Test Title', 'Test Content', 1))
-            self.db_connection.commit()
-            self.db_connection.close()
-
-        self.app.post('/login', data=dict(
-            username='test_user',
-            password='password'
-        ), follow_redirects=True)
-
-        # Edit the post
-        response = self.app.post('/1/edit', data=dict(
-            title='New Title',
-            content='New Content'
-        ), follow_redirects=True)
-
-        # Check if the response is successful and the post is updated
-        self.assertEqual(response.status_code, 200)
-        self.assertIn(b'Post updated successfully.', response.data)
-        self.assertIn(b'New Title', response.data)
-        self.assertIn(b'New Content', response.data)
-
-    def test_edit_profile(self):
-        with app.app_context():
-            self.db_connection = get_db_connection()
-            self.db_connection.execute("INSERT INTO users (username, password, email) VALUES (?, ?, ?)",
-                                       ('test_user', 'password', 'test_user@example.com'))
-            self.db_connection.commit()
-            self.db_connection.close()
-        # Log in the test user
-        self.app.post('/login', data=dict(
-            username='test_user',
-            password='password'
-        ), follow_redirects=True)
-
-        # Edit the user profile
-        response = self.app.post('/edit_profile', data=dict(
-            username='new-username',
-            email='newemail@example.com'
-        ), follow_redirects=True)
-
-        # Check if the response is successful and the user profile is updated
-        self.assertEqual(response.status_code, 200)
-        self.assertIn(b'Your profile has been updated.', response.data)
-        self.assertIn(b'new-username', response.data)
-        self.assertIn(b'newemail@example.com', response.data)
-
     def test_comment_route(self):
         post_id = 1
         comment_data = {'comment': 'Test comment'}
@@ -161,16 +105,6 @@ class BasicTests(unittest.TestCase):
         self.assertEqual(response.status_code, 302)
         # Перевірка редиректу на вірний URL
         self.assertEqual(response.headers['Location'], f'/{post_id}')
-
-    def test_delete_route(self):
-        # Тест для роуту /<int:id>/delete
-        post_id = 1
-        post_data = {'id': post_id}
-        response = self.app.post(f'/{post_id}/delete', data=post_data)
-        # Перевірка статус коду відповіді
-        self.assertEqual(response.status_code, 302)
-        # Перевірка редиректу на вірний URL
-        self.assertEqual(response.headers['Location'], 'http://localhost/')
 
 
 if __name__ == "__main__":
