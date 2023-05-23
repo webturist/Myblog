@@ -4,35 +4,46 @@ import sqlite3
 import mail as mail
 from flask import Flask, render_template, request, url_for, flash, redirect
 from werkzeug.exceptions import abort
-from flask_login import LoginManager, login_user, logout_user, login_required,\
+from flask_login import LoginManager, login_user, logout_user, login_required, \
     current_user
 from werkzeug.security import check_password_hash, generate_password_hash
 from flask_mail import Mail, Message
 import jwt
-
+import subprocess
+from threading import Thread
 from datetime import datetime, timedelta
 
 
 app = Flask(__name__)
 
 app.config['SECRET_KEY'] = 'My_secret_key'
-app.config['MAIL_SERVER'] = 'mail.packsumy.com.ua'
-app.config['MAIL_PORT'] = 465
-app.config['MAIL_USE_SSL'] = True
-try:
-    with open('mail.txt', 'r') as f:
-        lines = f.readlines()
-        if len(lines) < 2:
-            raise Exception('File mail.txt is not in the correct format')
-        app.config['MAIL_USERNAME'] = lines[0].strip()
-        app.config['MAIL_PASSWORD'] = lines[1].strip()
-except Exception as e:
-    app.logger.error(f'Error: {e}')
-
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
+
+
 mail = Mail(app)
+
+# Налаштування параметрів для тестового поштового сервера
+app.config['MAIL_SERVER'] = 'localhost'
+app.config['MAIL_PORT'] = 1050
+app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_USE_SSL'] = False
+app.config['MAIL_DEFAULT_SENDER'] = 'sender@example.com'
+
+
+# try:
+#     with open('mail.txt', 'r') as f:
+#         lines = f.readlines()
+#         if len(lines) < 2:
+#             raise Exception('File mail.txt is not in the correct format')
+#         app.config['MAIL_USERNAME'] = lines[0].strip()
+#         app.config['MAIL_PASSWORD'] = lines[1].strip()
+#         app.config['MAIL_SERVER'] = lines[2].strip()
+#         app.config['MAIL_PORT'] = lines[3].strip()
+#         app.config['MAIL_USE_SSL'] = True
+# except Exception as e:
+#     app.logger.error(f'Error: {e}')
 
 
 def get_db_connection():
@@ -124,7 +135,7 @@ def login():
         db = get_db_connection()
         username = request.form['username']
         password = request.form['password']
-        user = db.execute('SELECT * FROM users WHERE username = ?', 
+        user = db.execute('SELECT * FROM users WHERE username = ?',
                           (username,)).fetchone()
         db.close()
         if user and check_password_hash(user['password'], password):
@@ -155,9 +166,9 @@ def index():
 @app.route('/user/<username>')
 def user_profile(username):
     conn = get_db_connection()
-    user = conn.execute('SELECT * FROM users WHERE username = ?', 
+    user = conn.execute('SELECT * FROM users WHERE username = ?',
                         (username,)).fetchone()
-    posts = conn.execute('SELECT * FROM posts WHERE user_id = ?', 
+    posts = conn.execute('SELECT * FROM posts WHERE user_id = ?',
                          (user['id'],)).fetchall()
     conn.close()
     if user is None:
@@ -169,7 +180,7 @@ def user_profile(username):
 def post(post_id):
     post = get_post(post_id)
     conn = get_db_connection()
-    comments = conn.execute('SELECT * FROM comments WHERE post_id = ?', 
+    comments = conn.execute('SELECT * FROM comments WHERE post_id = ?',
                             (post_id,)).fetchall()
     return render_template('post.html', post=post, comments=comments)
 
