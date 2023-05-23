@@ -23,4 +23,4 @@ jobs:
 
     - name: Run Playwright test
       run: python app.py
-           python Playwright_test.py 
+           python Playwright_test2.py
