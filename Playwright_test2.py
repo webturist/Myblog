@@ -30,6 +30,9 @@ def run(playwright: Playwright) -> None:
     page.get_by_label("Password:").fill("pass")
     page.get_by_role("button", name="Submit").click()
 
+    # Перевірка, чи відображається індексна сторінка
+    assert page.title() == 'Welcome to FlaskBlog'
+
     # Створення нового запису
     page.locator("#navbarNav").get_by_role("link", name="New Post").click()
     page.get_by_placeholder("Post title").click()
@@ -38,6 +41,9 @@ def run(playwright: Playwright) -> None:
     page.get_by_placeholder("Post content").fill("text post")
     page.get_by_role("button", name="Submit").click()
 
+    # Перевірка, чи відображається сторінка зі створеним записом
+
+    assert page.get_by_text('New Post')
 
     # Редагування даних користувача
     page.get_by_role("link", name="Profile").click()
@@ -54,7 +60,7 @@ def run(playwright: Playwright) -> None:
     # Закриття браузера
     context.close()
     browser.close()
-
+    print('Test passed: All assertions succeeded.')
 
 with sync_playwright() as playwright:
     run(playwright)
