@@ -194,6 +194,7 @@ def comment(post_id):
                      (post_id, comment))
         conn.commit()
         conn.close()
+        flash('Comment added successfully')
         return redirect(url_for('post', post_id=post_id))
 
 
@@ -241,6 +242,7 @@ def edit(id):
                          (title, content, id))
             conn.commit()
             conn.close()
+            flash('Post updated successfully')
             return redirect(url_for('index'))
 
     return render_template('edit.html', post=post)
