@@ -22,4 +22,4 @@ jobs:
           pip install robotframework
 
       - name: Run tests robot
-        run: robot --outputdir results result.robot
+        run: robot --outputdir robot_test Robot_test.robot
