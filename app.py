@@ -9,8 +9,7 @@ from flask_login import LoginManager, login_user, logout_user, login_required, \
 from werkzeug.security import check_password_hash, generate_password_hash
 from flask_mail import Mail, Message
 import jwt
-import subprocess
-from threading import Thread
+
 from datetime import datetime, timedelta
 
 
