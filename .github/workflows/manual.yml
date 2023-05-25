@@ -22,4 +22,5 @@ jobs:
         pip install chromedriver
 
     - name: Run tests
-      run: python -m unittest discover
+      run: python app.py
+           python -m unittest discover
