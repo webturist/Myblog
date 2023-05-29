@@ -21,9 +21,6 @@ def step_fill_in_input_field(context, input_field, value):
     # Знаходження елемента поля вводу за назвою
     input_element = driver.find_element(By.NAME, input_field)
 
-    print(f"Input field: {input_field}")
-    print(f"Value: {value}")
-
     # Заповнення поля вводу значенням
     if value == "NONE":
         driver.execute_script("arguments[0].value = '';", input_element)
