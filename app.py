@@ -1,6 +1,6 @@
 import os.path
 import sqlite3
-
+import re
 import mail as mail
 from flask import Flask, render_template, request, url_for, flash, redirect
 from werkzeug.exceptions import abort
@@ -69,11 +69,24 @@ def register():
         username = request.form['username']
         password = request.form['password']
         email = request.form['email']
+
+        # Перевірка на введення паролю, логіна та електронної пошти
+        if not password or not username or not email:
+            flash('Please enter all required fields.')
+            return redirect(url_for('register'))
+
+        # Перевірка формату емейлу
+        email_pattern = r'^[\w\.-]+@[\w\.-]+\.\w+$'
+        if not re.match(email_pattern, email):
+            flash('Invalid email format. Please enter a valid email address.')
+            return redirect(url_for('register'))
+
         existing_user = db.execute('SELECT * FROM users WHERE username = ?',
                                    (username,)).fetchone()
         if existing_user:
             flash('Username already exists. Please choose a different one.')
             return redirect(url_for('register'))
+
         db.execute('INSERT INTO users (username, email, password)'
                    ' VALUES (?, ?, ?)',
                    (username, email, generate_password_hash(password)))
@@ -81,8 +94,8 @@ def register():
         db.close()
         flash('You have successfully registered!')
         return redirect(url_for('login'))
-    return render_template('security/register_user.html')
 
+    return render_template('security/register_user.html')
 
 def get_post(post_id):
     conn = get_db_connection()
