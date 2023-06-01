@@ -6,7 +6,7 @@ Library    OperatingSystem
 ${BROWSER}    chrome
 ${URL}        http://127.0.0.1:5000
 ${CHROME_OPTIONS}    remote-debugging-port=9222    headless
-
+[Setup]    Create Chrome Webdriver    options=${CHROME_OPTIONS}
 *** Test Cases ***
 Register User
     Open Browser    ${URL}    ${BROWSER}
