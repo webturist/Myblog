@@ -58,7 +58,8 @@ class AppTest(unittest.TestCase):
         # Підтвердження успішної реєстрації
         welcome_message = WebDriverWait(self.driver, 10).until(
             EC.presence_of_element_located(
-                (By.XPATH,"//div[contains(text(), 'You have successfully registered!')]"))
+                (By.XPATH, "//div[contains(text(),"
+                           " 'You have successfully registered!')]"))
         )
         self.assertIn('You have successfully registered!',
                       welcome_message.text)
@@ -137,7 +138,8 @@ class AppTest(unittest.TestCase):
         # Перевірка, що пост успішно оновлений
         success_message = WebDriverWait(self.driver, 10).until(
             EC.presence_of_element_located(
-                (By.XPATH, "//div[contains(text(), 'Post updated successfully')]"))
+                (By.XPATH, "//div[contains(text(),"
+                           " 'Post updated successfully')]"))
         )
         self.assertIn('Post updated successfully', success_message.text)
 
@@ -165,7 +167,8 @@ class AppTest(unittest.TestCase):
         # Перевірка, що коментар успішно доданий
         success_message = WebDriverWait(self.driver, 10).until(
             EC.presence_of_element_located(
-                (By.XPATH, "//div[contains(text(), 'Comment added successfully')]"))
+                (By.XPATH, "//div[contains(text(),"
+                           " 'Comment added successfully')]"))
         )
         self.assertIn('Comment added successfully', success_message.text)
 
@@ -206,7 +209,8 @@ class AppTest(unittest.TestCase):
         # Перевірка, що пост успішно видалений
         success_message = WebDriverWait(self.driver, 10).until(
             EC.presence_of_element_located(
-                (By.XPATH, "//div[contains(text(),'was successfully deleted!')]"))
+                (By.XPATH, "//div[contains(text(),"
+                           "'was successfully deleted!')]"))
         )
         self.assertIn('was successfully deleted!', success_message.text)
 

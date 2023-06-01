@@ -52,7 +52,8 @@ def step_verify_registration_success(context):
     # Очікування успішної реєстрації
     WebDriverWait(driver, 10).until(
         EC.presence_of_element_located(
-            (By.XPATH, "//div[contains(text(),'You have successfully registered!')]"))
+            (By.XPATH, "//div[contains(text(),"
+                       "'You have successfully registered!')]"))
     )
 
 

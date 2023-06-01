@@ -1,7 +1,7 @@
 import os.path
 import sqlite3
 import re
-import mail as mail
+
 from flask import Flask, render_template, request, url_for, flash, redirect
 from werkzeug.exceptions import abort
 from flask_login import LoginManager, login_user, logout_user,\
