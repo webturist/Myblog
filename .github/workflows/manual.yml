@@ -19,8 +19,10 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
         pip install selenium
-        pip install chromedriver
+            
+
+    - name: Run app.py
+      run: python app.py &
 
     - name: Run tests
-      run: python app.py
-           python -m unittest discover
+      run: python -m unittest discover

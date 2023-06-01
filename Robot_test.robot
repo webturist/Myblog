@@ -4,7 +4,7 @@ Library    OperatingSystem
 
 *** Variables ***
 ${BROWSER}    chrome
-${URL}        http://localhost:5000
+${URL}        http://127.0.0.1:5000
 
 *** Test Cases ***
 Register User

@@ -12,14 +12,12 @@ import jwt
 
 from datetime import datetime, timedelta
 
-
 app = Flask(__name__)
 
 app.config['SECRET_KEY'] = 'My_secret_key'
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
-
 
 mail = Mail(app)
 
@@ -96,6 +94,7 @@ def register():
         return redirect(url_for('login'))
 
     return render_template('security/register_user.html')
+
 
 def get_post(post_id):
     conn = get_db_connection()
@@ -393,3 +392,7 @@ def edit_profile():
         return redirect(url_for('user_profile', username=username))
 
     return render_template('security/edit_profile.html')
+
+
+if __name__ == '__main__':
+    app.run(host='127.0.0.1', port=5000)

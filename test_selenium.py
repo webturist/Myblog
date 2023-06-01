@@ -1,5 +1,7 @@
 import os
+import platform
 import unittest
+import tempfile
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -9,7 +11,22 @@ from selenium.webdriver.support import expected_conditions as EC
 class AppTest(unittest.TestCase):
     def setUp(self):
         # Ініціалізація веб-драйвера (Chrome)
-        self.driver = webdriver.Chrome()
+        chrome_options = webdriver.ChromeOptions()
+        system_name = platform.system()
+        if system_name == 'Windows':
+            chrome_options.add_argument("--headless")  # Додайте додаткові параметри для Windows
+            self.driver = webdriver.Chrome(options=chrome_options)
+        else:
+            tmp_folder = tempfile.mkdtemp()
+            chrome_options.add_argument('--disable-gpu')
+            chrome_options.add_argument('--user-data-dir={}'.format(tmp_folder + '/user-data'))
+            chrome_options.add_argument('--data-path={}'.format(tmp_folder + '/data-path'))
+            chrome_options.add_argument('--homedir={}'.format(tmp_folder))
+            chrome_options.add_argument('--disk-cache-dir={}'.format(tmp_folder + '/cache-dir'))
+            chrome_options.add_argument('--remote-debugging-port=9222')
+
+            chrome_options.binary_location = "/usr/bin/google-chrome"
+            self.driver = webdriver.Chrome(options=chrome_options, executable_path="/usr/local/bin/chromedriver")
         self.driver.get('http://localhost:5000')
         self.screenshot_dir = "screenshot_tests"
 

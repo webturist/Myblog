@@ -1,14 +1,13 @@
-name: Playwright Test
+name: Run tests
 
 on: [push]
 
 jobs:
-  test:
-    runs-on: ubuntu-latest 
+  build:
+    runs-on: windows-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+    - uses: actions/checkout@v2
 
     - name: Set up Python
       uses: actions/setup-python@v2
@@ -19,10 +18,11 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-        playwright install
-        
+        pip install selenium
+            
+
     - name: Run app.py
       run: python app.py &
 
-    - name: Run Playwright test
-      run: python Playwright_test2.py
+    - name: Run tests
+      run: python -m unittest discover

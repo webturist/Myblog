@@ -21,14 +21,11 @@ def run(playwright: Playwright) -> None:
     page.get_by_role("button", name="Submit").click()
     sys.stderr.write('New User has been created\n')
 
-
     try:
         assert page.query_selector('text="You have successfully registered!"') is not None
         sys.stderr.write('Test passed: registration success message displayed correctly\n')
     except:
         sys.stderr.write(f'Error: registration success message not displayed correctly\n')
-
-
 
     if page.get_by_text('Username already exists. Please choose a different one.'):
         page.get_by_role("link", name="Login").click()
