@@ -26,7 +26,7 @@ def step_navigate_to_registration_page(context):
     driver.get("http://127.0.0.1:5000/register")
 
 
-@when(u'I fill in "{input_field}" with "{value}"')
+@when('I fill in "{input_field}" with "{value}"')
 def step_fill_in_input_field(context, input_field, value):
     # Знаходження елемента поля вводу за назвою
     input_element = driver.find_element(By.NAME, input_field)
@@ -51,8 +51,8 @@ def step_click_register_button(context):
 def step_verify_registration_success(context):
     # Очікування успішної реєстрації
     WebDriverWait(driver, 10).until(
-        EC.presence_of_element_located((By.XPATH, "//div[contains(text(),"
-                                                  " 'You have successfully registered!')]"))
+        EC.presence_of_element_located((By.XPATH,
+                                        "//div[contains(text(),'You have successfully registered!')]"))
     )
 
 
@@ -65,8 +65,8 @@ def step_verify_home_page(context):
 @then('I should see "{message}" message as "{expected_message}"')
 def step_verify_message(context, message, expected_message):
     # Знаходження елемента з повідомленням за текстом
-    message_element = driver.find_element(By.XPATH, f"//*[contains(text(),"
-                                                    f" '{message}')]")
+    message_element = driver.find_element(By.XPATH,
+                                          f"//*[contains(text(),'{message}')]")
 
     # Перевірка очікуваного повідомлення
     assert expected_message in message_element.text
@@ -86,8 +86,8 @@ def step_verify_links(context, link1, link2):
       ' field on "Registration" page')
 def step_verify_form_error_message(context, error_message, input_field):
     # Знаходження елемента з повідомленням про помилку за текстом
-    error_message_element = driver.find_element(By.XPATH, f"//div[contains(text(),"
-                                                          f" '{error_message}')]")
+    error_message_element = driver.find_element(By.XPATH,
+                                                f"//div[contains(text(), '{error_message}')]")
 
     # Перевірка очікуваного повідомлення про помилку
     assert error_message in error_message_element.text

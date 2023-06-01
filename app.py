@@ -1,7 +1,7 @@
 import os.path
 import sqlite3
 import re
-import mail as mail
+import mail as mail_app
 from flask import Flask, render_template, request, url_for, flash, redirect
 from werkzeug.exceptions import abort
 from flask_login import LoginManager, login_user, logout_user,\
@@ -19,7 +19,7 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 
-mail = Mail(app)
+mail_app = Mail(app)
 
 # Налаштування параметрів для тестового поштового сервера
 app.config['MAIL_SERVER'] = 'localhost'
@@ -316,12 +316,12 @@ def reset_request():
                           sender='noreply@demo.com',
                           recipients=[user[3]])
             msg.body = f'''To reset your password, visit the following link:
-{url_for('reset_token', token=token, _external=True)}
-If you did not make this request then simply 
-ignore this email and no changes will be made.
-'''
+            {url_for('reset_token', token=token, _external=True)}
+            If you did not make this request then simply 
+            ignore this email and no changes will be made.
+            '''
             try:
-                mail.send(msg)
+                mail_app.send(msg)
                 flash('An email has been sent with instructions'
                       ' to reset your password.')
                 return redirect(url_for('login'))

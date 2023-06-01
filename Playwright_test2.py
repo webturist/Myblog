@@ -2,9 +2,9 @@ import sys
 from playwright.sync_api import Playwright, sync_playwright
 
 
-def run(playwright: Playwright) -> None:
-    browser = playwright.chromium.launch(headless=True,
-                                         args=['--remote-debugging-port=9222'])
+def run(playwright_instance: Playwright) -> None:
+    browser = playwright_instance.chromium.launch(
+        args=['--remote-debugging-port=9222'], headless=True)
     context = browser.new_context()
     page = context.new_page()
 
@@ -27,9 +27,9 @@ def run(playwright: Playwright) -> None:
                                    'successfully registered!"') is not None
         sys.stderr.write('Test passed: registration '
                          'success message displayed correctly\n')
-    except:
-        sys.stderr.write(f'Error: registration '
-                         f'success message not displayed correctly\n')
+    except IOError:
+        sys.stderr.write('Error: registration '
+                         'success message not displayed correctly\n')
 
     if page.get_by_text('Username already exists. '
                         'Please choose a different one.'):
@@ -48,9 +48,9 @@ def run(playwright: Playwright) -> None:
         assert page.title() == 'Welcome to FlaskBlog'
         sys.stderr.write('Test passed: the title '
                          'page is displayed correctly\n')
-    except:
-        sys.stderr.write(f'Error: the title page '
-                         f'not displayed correctly\n')
+    except IOError:
+        sys.stderr.write('Error: the title page '
+                         'not displayed correctly\n')
 
     # Створення нового запису
     page.locator("#navbarNav").get_by_role("link", name="New Post").click()
@@ -61,15 +61,15 @@ def run(playwright: Playwright) -> None:
     page.get_by_role("button", name="Submit").click()
     sys.stderr.write('New Post has been created\n')
     page.locator("div").filter(
-        has_text="Welcome to FlaskBlog").get_by_role("link",
-                                                     name="New Post").first.click()
+        has_text="Welcome to FlaskBlog")\
+        .get_by_role("link", name="New Post").first.click()
 
     # Перевірка, чи відображається сторінка зі створеним записом
     try:
         assert page.title() == 'New Post by test'
         sys.stderr.write('Test passed: New Post is displayed correctly\n')
-    except:
-        sys.stderr.write(f'Error: New Post not displayed correctly\n')
+    except IOError:
+        sys.stderr.write('Error: New Post not displayed correctly\n')
 
     # Видалення цього запису
     # page.locator("div").filter(has_text="Welcome to FlaskBlog").get_by_role("link", name="New Post").click()
