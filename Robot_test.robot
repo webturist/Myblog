@@ -48,7 +48,7 @@ Edit Post
     Input Text    password    testpassword
     Click Button    Submit
     Click Element    //a[h2='Test Post']
-    Click Element    //a[@href='/3/edit']//span[@class='badge badge-warning']
+    Click Element    //span[@class='badge badge-warning']
     Input Text    title    Updated Post
     Input Text    content    This post has been updated.
     Click Button    Submit
@@ -62,8 +62,8 @@ Delete Post
     Input Text    password    testpassword
     Click Button    Submit
     Click Element    //a[h2='Updated Post']
-    Click Element    //a[@href='/3/edit']//span[@class='badge badge-warning']
-    Click Button    //form[@action='/3/delete']//input[@value='Delete Post']
+    Click Element    //span[@class='badge badge-warning']
+    Click Button    //input[@value='Delete Post']
     Handle Alert    Accept
     Page Should Contain    "Updated Post" was successfully deleted!
     Close Browser
