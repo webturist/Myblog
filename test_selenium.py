@@ -57,8 +57,8 @@ class AppTest(unittest.TestCase):
 
         # Підтвердження успішної реєстрації
         welcome_message = WebDriverWait(self.driver, 10).until(
-            EC.presence_of_element_located((By.XPATH,
-                                            "//div[contains(text(), 'You have successfully registered!')]"))
+            EC.presence_of_element_located(
+                (By.XPATH,"//div[contains(text(), 'You have successfully registered!')]"))
         )
         self.assertIn('You have successfully registered!',
                       welcome_message.text)
@@ -105,8 +105,8 @@ class AppTest(unittest.TestCase):
 
         # Перевірка, що пост успішно створений
         success_message = WebDriverWait(self.driver, 10).until(
-            EC.presence_of_element_located((By.XPATH,
-                                            "//h2[contains(text(), 'New Post')]"))
+            EC.presence_of_element_located(
+                (By.XPATH, "//h2[contains(text(), 'New Post')]"))
         )
         self.assertIn('New Post', success_message.text)
 
@@ -116,8 +116,9 @@ class AppTest(unittest.TestCase):
 
         # Натиснути на посилання редагування поста з відповідним ID
         post_id = 1  # ID поста для редагування
-        edit_post_link = self.driver.find_element(By.XPATH,
-                                                  f"//a[@href='/{post_id}/edit']")
+        edit_post_link = self.driver.find_element(
+            By.XPATH, f"//a[@href='/{post_id}/edit']"
+        )
         edit_post_link.click()
 
         # Введення коректних даних для редагування поста
@@ -135,8 +136,8 @@ class AppTest(unittest.TestCase):
 
         # Перевірка, що пост успішно оновлений
         success_message = WebDriverWait(self.driver, 10).until(
-            EC.presence_of_element_located((By.XPATH,
-                                            "//div[contains(text(), 'Post updated successfully')]"))
+            EC.presence_of_element_located(
+                (By.XPATH, "//div[contains(text(), 'Post updated successfully')]"))
         )
         self.assertIn('Post updated successfully', success_message.text)
 
@@ -163,8 +164,8 @@ class AppTest(unittest.TestCase):
 
         # Перевірка, що коментар успішно доданий
         success_message = WebDriverWait(self.driver, 10).until(
-            EC.presence_of_element_located([By.XPATH,
-                                            "//div[contains(text(), 'Comment added successfully')]"])
+            EC.presence_of_element_located(
+                (By.XPATH, "//div[contains(text(), 'Comment added successfully')]"))
         )
         self.assertIn('Comment added successfully', success_message.text)
 
@@ -177,8 +178,8 @@ class AppTest(unittest.TestCase):
 
         # Перевірка, що коментар відображається на сторінці поста
         comment_text_element = WebDriverWait(self.driver, 10).until(
-            EC.presence_of_element_located((By.XPATH,
-                                            f"//p[contains(text(), '{comment_text}')]"))
+            EC.presence_of_element_located(
+                (By.XPATH, f"//p[contains(text(), '{comment_text}')]"))
         )
         self.assertIsNotNone(comment_text_element)
 
@@ -188,13 +189,15 @@ class AppTest(unittest.TestCase):
 
         # Натиснути на посилання редагування поста з відповідним ID
         post_id = 1  # ID поста для видалення
-        edit_post_link = self.driver.find_element(By.XPATH,
-                                                  f"//a[@href='/{post_id}/edit']")
+        edit_post_link = self.driver.find_element(
+            By.XPATH, f"//a[@href='/{post_id}/edit']"
+        )
         edit_post_link.click()
 
         # Підтвердження видалення
-        delete_post_button = self.driver.find_element(By.XPATH,
-                                                      "//input[@value='Delete Post']")
+        delete_post_button = self.driver.find_element(
+            By.XPATH, "//input[@value='Delete Post']"
+        )
         delete_post_button.click()
         alert = self.driver.switch_to.alert
         alert.accept()
@@ -202,8 +205,8 @@ class AppTest(unittest.TestCase):
 
         # Перевірка, що пост успішно видалений
         success_message = WebDriverWait(self.driver, 10).until(
-            EC.presence_of_element_located((By.XPATH, "//div[contains(text(),"
-                                                      "'was successfully deleted!')]"))
+            EC.presence_of_element_located(
+                (By.XPATH, "//div[contains(text(),'was successfully deleted!')]"))
         )
         self.assertIn('was successfully deleted!', success_message.text)
 
