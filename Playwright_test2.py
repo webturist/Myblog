@@ -72,7 +72,8 @@ def run(playwright_instance: Playwright) -> None:
         sys.stderr.write('Error: New Post not displayed correctly\n')
 
     # Видалення цього запису
-    # page.locator("div").filter(has_text="Welcome to FlaskBlog").get_by_role("link", name="New Post").click()
+    # page.locator("div").filter(has_text="Welcome to
+    # FlaskBlog").get_by_role("link", name="New Post").click()
     # page.get_by_role("link", name="Edit").click()
     # page.get_by_role("button", name="Delete Post").click()
     # page.once("dialog", lambda dialog: dialog.dismiss())

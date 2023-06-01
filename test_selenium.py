@@ -57,8 +57,8 @@ class AppTest(unittest.TestCase):
 
         # Підтвердження успішної реєстрації
         welcome_message = WebDriverWait(self.driver, 10).until(
-            EC.presence_of_element_located((By.XPATH, "//div[contains(text(),"
-                                                      " 'You have successfully registered!')]"))
+            EC.presence_of_element_located((By.XPATH,
+                                            "//div[contains(text(), 'You have successfully registered!')]"))
         )
         self.assertIn('You have successfully registered!',
                       welcome_message.text)
@@ -163,15 +163,15 @@ class AppTest(unittest.TestCase):
 
         # Перевірка, що коментар успішно доданий
         success_message = WebDriverWait(self.driver, 10).until(
-            EC.presence_of_element_located((By.XPATH,
-                                            "//div[contains(text(), 'Comment added successfully')]"))
+            EC.presence_of_element_located([By.XPATH,
+                                            "//div[contains(text(), 'Comment added successfully')]"])
         )
         self.assertIn('Comment added successfully', success_message.text)
 
         # Перевірка, що перенаправлення відбувається на сторінку поста
         post_title = WebDriverWait(self.driver, 10).until(
             EC.presence_of_element_located((By.XPATH,
-                                            f"//h2[contains(text(), 'Post')]"))
+                                            "//h2[contains(text(), 'Post')]"))
         )
         self.assertIsNotNone(post_title)
 
@@ -203,7 +203,7 @@ class AppTest(unittest.TestCase):
         # Перевірка, що пост успішно видалений
         success_message = WebDriverWait(self.driver, 10).until(
             EC.presence_of_element_located((By.XPATH, "//div[contains(text(),"
-                                                      " 'was successfully deleted!')]"))
+                                                      "'was successfully deleted!')]"))
         )
         self.assertIn('was successfully deleted!', success_message.text)
 

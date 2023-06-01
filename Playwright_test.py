@@ -3,8 +3,8 @@ from playwright.sync_api import sync_playwright
 
 def test_flask_app():
     with sync_playwright() as playwright:
-        browser = playwright.chromium.launch(headless=True,
-                                             args=['--remote-debugging-port=9222'])
+        browser = playwright.chromium.launch(
+            headless=True, args=['--remote-debugging-port=9222'])
         context = browser.new_context()
         page = context.new_page()
 
