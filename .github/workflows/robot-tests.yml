@@ -28,6 +28,4 @@ jobs:
         run: python app.py &
 
       - name: Run tests robot
-        env:
-          CHROME_LAUNCHER_ARGS: "--remote-debugging-port=9222 --headless"
         run: robot Robot_test.robot

@@ -8,7 +8,7 @@ ${URL}        http://127.0.0.1:5000
 
 *** Test Cases ***
 Register User
-    Open Browser    ${URL}    ${BROWSER}
+    Open Browser    ${URL}    ${BROWSER}  options=add_argument("--remote-debugging-port=9222"); add_argument("--headless")
     Click Link    Register
     Input Text    username    testuser
     Input Text    password    testpassword
@@ -18,7 +18,7 @@ Register User
     Close Browser
 
 Login User
-    Open Browser    ${URL}    ${BROWSER}
+    Open Browser    ${URL}    ${BROWSER}  options=add_argument("--remote-debugging-port=9222"); add_argument("--headless")
     Click Link    Login
     Input Text    username    testuser
     Input Text    password    testpassword
@@ -27,7 +27,7 @@ Login User
     Close Browser
 
 Create Post
-    Open Browser    ${URL}    ${BROWSER}
+    Open Browser    ${URL}    ${BROWSER}  options=add_argument("--remote-debugging-port=9222"); add_argument("--headless")
     Click Link    Login
     Input Text    username    testuser
     Input Text    password    testpassword
@@ -42,7 +42,7 @@ Create Post
     Close Browser
 
 Edit Post
-    Open Browser    ${URL}    ${BROWSER}
+    Open Browser    ${URL}    ${BROWSER}  options=add_argument("--remote-debugging-port=9222"); add_argument("--headless")
     Click Link    Login
     Input Text    username    testuser
     Input Text    password    testpassword
@@ -56,7 +56,7 @@ Edit Post
     Close Browser
 
 Delete Post
-    Open Browser    ${URL}    ${BROWSER}
+    Open Browser    ${URL}    ${BROWSER}  options=add_argument("--remote-debugging-port=9222"); add_argument("--headless")
     Click Link    Login
     Input Text    username    testuser
     Input Text    password    testpassword
