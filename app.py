@@ -68,7 +68,7 @@ def register():
         password = request.form['password']
         email = request.form['email']
 
-        # Перевірка на введення паролю, логіна та електронної пошти
+        # Перевірка на введення пароля, логіна та електронної пошти
         if not password or not username or not email:
             flash('Please enter all required fields.')
             return redirect(url_for('register'))
