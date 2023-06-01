@@ -5,7 +5,6 @@ Library    OperatingSystem
 *** Variables ***
 ${BROWSER}    chrome
 ${URL}        http://127.0.0.1:5000
-${CHROME_OPTIONS}    remote-debugging-port=9222    headless
 
 *** Test Cases ***
 Register User
@@ -69,6 +68,3 @@ Delete Post
     Page Should Contain    "Updated Post" was successfully deleted!
     Close Browser
 
-*** Keywords ***
-Setup
-    Create Chrome Webdriver    options=${CHROME_OPTIONS}
