@@ -4,8 +4,8 @@ import re
 import mail as mail
 from flask import Flask, render_template, request, url_for, flash, redirect
 from werkzeug.exceptions import abort
-from flask_login import LoginManager, login_user, logout_user, login_required, \
-    current_user
+from flask_login import LoginManager, login_user, logout_user,\
+    login_required, current_user
 from werkzeug.security import check_password_hash, generate_password_hash
 from flask_mail import Mail, Message
 import jwt
@@ -184,7 +184,8 @@ def user_profile(username):
     conn.close()
     if user is None:
         abort(404)
-    return render_template('security/user_profile.html', user=user, posts=posts)
+    return render_template('security/user_profile.html',
+                           user=user, posts=posts)
 
 
 @app.route('/<int:post_id>')
@@ -282,7 +283,8 @@ def get_reset_token(user, expires_sec=1800):
 
 def verify_reset_token(token):
     try:
-        payload = jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])
+        payload = jwt.decode(token, app.config['SECRET_KEY'],
+                             algorithms=['HS256'])
         user_id = payload['user_id']
     except jwt.ExpiredSignatureError:
         return None
@@ -315,17 +317,20 @@ def reset_request():
                           recipients=[user[3]])
             msg.body = f'''To reset your password, visit the following link:
 {url_for('reset_token', token=token, _external=True)}
-If you did not make this request then simply ignore this email and no changes will be made.
+If you did not make this request then simply 
+ignore this email and no changes will be made.
 '''
             try:
                 mail.send(msg)
-                flash('An email has been sent with instructions to reset your password.')
+                flash('An email has been sent with instructions'
+                      ' to reset your password.')
                 return redirect(url_for('login'))
             except Exception as e:
                 flash(f'An error occurred while sending the email: {e}')
                 return redirect(url_for('reset_password'))
         else:
-            flash('There is no account with that email. You must register first.')
+            flash('There is no account with that email.'
+                  ' You must register first.')
             return redirect(url_for('register'))
     return render_template('security/reset_password.html')
 
@@ -390,7 +395,6 @@ def edit_profile():
         conn.close()
         flash('Your profile has been updated.')
         return redirect(url_for('user_profile', username=username))
-
     return render_template('security/edit_profile.html')
 
 

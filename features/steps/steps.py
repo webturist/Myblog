@@ -20,7 +20,6 @@ else:
 driver.implicitly_wait(10)  # Задання неявного очікування
 
 
-
 @given('I navigate to the "Registration" page')
 def step_navigate_to_registration_page(context):
     # Відкриття сторінки "Registration"
@@ -39,7 +38,6 @@ def step_fill_in_input_field(context, input_field, value):
         input_element.send_keys(value)
 
 
-
 @when('I click on the "Submit" button')
 def step_click_register_button(context):
     # Знаходження кнопки "submit" за текстом
@@ -53,7 +51,8 @@ def step_click_register_button(context):
 def step_verify_registration_success(context):
     # Очікування успішної реєстрації
     WebDriverWait(driver, 10).until(
-        EC.presence_of_element_located((By.XPATH, "//div[contains(text(), 'You have successfully registered!')]"))
+        EC.presence_of_element_located((By.XPATH, "//div[contains(text(),"
+                                                  " 'You have successfully registered!')]"))
     )
 
 
@@ -66,7 +65,8 @@ def step_verify_home_page(context):
 @then('I should see "{message}" message as "{expected_message}"')
 def step_verify_message(context, message, expected_message):
     # Знаходження елемента з повідомленням за текстом
-    message_element = driver.find_element(By.XPATH, f"//*[contains(text(), '{message}')]")
+    message_element = driver.find_element(By.XPATH, f"//*[contains(text(),"
+                                                    f" '{message}')]")
 
     # Перевірка очікуваного повідомлення
     assert expected_message in message_element.text
@@ -82,10 +82,12 @@ def step_verify_links(context, link1, link2):
     assert link1_element.is_displayed() and link2_element.is_displayed()
 
 
-@then('I should see "{error_message}" message for "{input_field}" field on "Registration" page')
+@then('I should see "{error_message}" message for "{input_field}"'
+      ' field on "Registration" page')
 def step_verify_form_error_message(context, error_message, input_field):
     # Знаходження елемента з повідомленням про помилку за текстом
-    error_message_element = driver.find_element(By.XPATH, f"//div[contains(text(), '{error_message}')]")
+    error_message_element = driver.find_element(By.XPATH, f"//div[contains(text(),"
+                                                          f" '{error_message}')]")
 
     # Перевірка очікуваного повідомлення про помилку
     assert error_message in error_message_element.text

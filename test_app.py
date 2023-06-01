@@ -22,9 +22,12 @@ class BasicTests(unittest.TestCase):
             self.db_connection.execute("DELETE FROM users")
             self.db_connection.execute("DELETE FROM posts")
             self.db_connection.execute("DELETE FROM comments")
-            self.db_connection.execute("DELETE FROM SQLITE_SEQUENCE WHERE name='users'")
-            self.db_connection.execute("DELETE FROM SQLITE_SEQUENCE WHERE name='posts'")
-            self.db_connection.execute("DELETE FROM SQLITE_SEQUENCE WHERE name='comments'")
+            self.db_connection.execute("DELETE FROM SQLITE_SEQUENCE"
+                                       " WHERE name='users'")
+            self.db_connection.execute("DELETE FROM SQLITE_SEQUENCE"
+                                       " WHERE name='posts'")
+            self.db_connection.execute("DELETE FROM SQLITE_SEQUENCE"
+                                       " WHERE name='comments'")
             self.db_connection.commit()
             self.db_connection.close()
 
@@ -52,7 +55,8 @@ class BasicTests(unittest.TestCase):
             self.db_connection = get_db_connection()
             self.db_connection.execute(
                 "INSERT INTO users (username, password, email) "
-                "VALUES (?, ?, ?)", ('test_user', 'password', 'test_user@example.com')
+                "VALUES (?, ?, ?)", ('test_user', 'password',
+                                     'test_user@example.com')
             )
             self.db_connection.commit()
             self.db_connection.close()
@@ -67,11 +71,13 @@ class BasicTests(unittest.TestCase):
             self.db_connection = get_db_connection()
             self.db_connection.execute(
                 "INSERT INTO users (username, password, email) "
-                "VALUES (?, ?, ?)", ('test_user', 'password', 'test_user@example.com')
+                "VALUES (?, ?, ?)", ('test_user', 'password',
+                                     'test_user@example.com')
             )
             self.db_connection.execute(
                 "INSERT INTO posts (title, content, created, user_id) "
-                "VALUES (?, ?, ?, ?)", ('test title', 'test content', '2022-01-01', 1)
+                "VALUES (?, ?, ?, ?)", ('test title', 'test content',
+                                        '2022-01-01', 1)
             )
             self.db_connection.commit()
             self.db_connection.close()
@@ -88,7 +94,8 @@ class BasicTests(unittest.TestCase):
             self.db_connection = get_db_connection()
             self.db_connection.execute(
                 "INSERT INTO users (username, password, email) "
-                "VALUES (?, ?, ?)", ('test_user', 'password', 'test_user@example.com')
+                "VALUES (?, ?, ?)", ('test_user', 'password',
+                                     'test_user@example.com')
             )
             self.db_connection.commit()
             self.db_connection.close()
