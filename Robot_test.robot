@@ -67,4 +67,3 @@ Delete Post
     Handle Alert    Accept
     Page Should Contain    "Updated Post" was successfully deleted!
     Close Browser
-
