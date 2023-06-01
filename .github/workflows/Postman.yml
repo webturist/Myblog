@@ -30,4 +30,5 @@ jobs:
         run: python app.py &
 
       - name: Run API tests
-        run: postman collection run "2416374-a8e40435-0633-41bd-b997-7c4f8786cf9b" --chrome-launcher-args="--remote-debugging-port=9222 --headless"
+        run: postman collection run "2416374-a8e40435-0633-41bd-b997-7c4f8786cf9b" --env-var "chrome-launcher-args=--remote-debugging-port=9222 --headless"
+
