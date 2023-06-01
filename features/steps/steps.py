@@ -1,12 +1,23 @@
-
+import platform
 from behave import given, when, then
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.support import expected_conditions as EC
 
 # Ініціалізація веб-драйвера
-driver = webdriver.Chrome()
+if platform.system() == 'Windows':
+    # Шлях до chromedriver не потрібно вказувати для Windows
+    driver = webdriver.Chrome()
+else:
+    # Вкажіть шлях до chromedriver для інших операційних систем
+    options = Options()
+    options.add_argument('--remote-debugging-port=9222')
+    options.add_argument("--headless")
+    driver = webdriver.Chrome(service=Service(), options=options)
+driver.implicitly_wait(10)  # Задання неявного очікування
 
 
 
